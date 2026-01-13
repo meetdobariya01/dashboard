@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "../header/header";
 // import "./dashboard.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "../header/header";
 
 const API_BASE = "http://localhost:5000/api/admin";
 
@@ -60,66 +60,69 @@ function Home() {
   };
 
   return (
-    <div className="dashboard-container container-fluid">
+    <div>
+      {/* header */}
       <Header />
 
-      <h2 className="dashboard-title">Admin Dashboard</h2>
+      <div>
+        <h2 className="dashboard-title">Admin Dashboard</h2>
 
-      {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
-      {/* STATS */}
-      <div className="row g-4 mb-4">
-        <div className="col-md-6 col-lg-4">
-          <div className="card stat-card h-100">
-            <div className="card-body">
-              <h6 className="text-muted">Total Sales</h6>
-              <h3 className="fw-bold">${totalSales}</h3>
+        {/* STATS */}
+        <div className="row g-4 mb-4">
+          <div className="col-md-6 col-lg-4">
+            <div className="card stat-card h-100">
+              <div className="card-body">
+                <h6 className="text-muted">Total Sales</h6>
+                <h3 className="fw-bold">${totalSales}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4">
+            <div className="card stat-card h-100">
+              <div className="card-body">
+                <h6 className="text-muted">Average Sale</h6>
+                <h3 className="fw-bold">${avgSale.toFixed(2)}</h3>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="col-md-6 col-lg-4">
-          <div className="card stat-card h-100">
-            <div className="card-body">
-              <h6 className="text-muted">Average Sale</h6>
-              <h3 className="fw-bold">${avgSale.toFixed(2)}</h3>
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* BEST PRODUCTS TABLE */}
+        <div className="card table-card">
+          <div className="card-body">
+            <h5 className="mb-3">Best Selling Products</h5>
 
-      {/* BEST PRODUCTS TABLE */}
-      <div className="card table-card">
-        <div className="card-body">
-          <h5 className="mb-3">Best Selling Products</h5>
-
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead className="table-light">
-                <tr>
-                  <th>Product</th>
-                  <th>Sold Qty</th>
-                  <th>Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                {bestProducts.length === 0 && (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-light">
                   <tr>
-                    <td colSpan="3" className="text-center text-muted">
-                      No data available
-                    </td>
+                    <th>Product</th>
+                    <th>Sold Qty</th>
+                    <th>Revenue</th>
                   </tr>
-                )}
+                </thead>
+                <tbody>
+                  {bestProducts.length === 0 && (
+                    <tr>
+                      <td colSpan="3" className="text-center text-muted">
+                        No data available
+                      </td>
+                    </tr>
+                  )}
 
-                {bestProducts.map((p) => (
-                  <tr key={p.productId}>
-                    <td>{p.productName || "Unknown"}</td>
-                    <td>{p.totalQty}</td>
-                    <td className="fw-semibold">${p.totalSales}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  {bestProducts.map((p) => (
+                    <tr key={p.productId}>
+                      <td>{p.productName || "Unknown"}</td>
+                      <td>{p.totalQty}</td>
+                      <td className="fw-semibold">${p.totalSales}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
