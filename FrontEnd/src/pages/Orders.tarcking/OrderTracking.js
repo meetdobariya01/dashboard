@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Header from "../header/header";
 
 // Simple emoji-based icon component (no external libraries needed)
 const Icon = ({ status }) => {
@@ -49,6 +50,9 @@ export default function OrderTrackingPage() {
   };
 
   return (
+    <div>
+      {/* header */}
+      <Header/>
     <div
       style={{
         minHeight: "100vh",
@@ -64,7 +68,7 @@ export default function OrderTrackingPage() {
           width: "100%",
           maxWidth: "700px",
           background: "white",
-          padding: "25px",
+          padding: "17px",
           borderRadius: "15px",
           boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
         }}
@@ -89,7 +93,8 @@ export default function OrderTrackingPage() {
               flex: 1,
               padding: "12px",
               borderRadius: "8px",
-              border: "1px solid #ddd"
+              border: "1px solid #ddd",
+              width:"10px"
             }}
           />
           <button
@@ -162,6 +167,7 @@ export default function OrderTrackingPage() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

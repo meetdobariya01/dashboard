@@ -57,7 +57,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="pro-login-wrapper d-flex align-items-center justify-content-center">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -65,7 +65,7 @@ const handleSubmit = async (e) => {
           transition={{ duration: 0.6 }}
           className="pro-login-card p-5 rounded-4 shadow-sm"
         >
-          <h3 className="text-center mb-4 fw-bold">Admin Login</h3>
+          <h3 className="text-center mb-4 fw-bold"> Tolvv Admin Login</h3>
 
           {serverError && (
             <div className="alert alert-danger text-center">{serverError}</div>
@@ -101,16 +101,16 @@ const handleSubmit = async (e) => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="btn w-100 py-2 pro-btn"
+              className="btn w-100 py-2 btn-outline-dark "
               type="submit"
               disabled={loading}
             >
               {loading ? "Signing In..." : "Admin Sign In"}
             </motion.button>
 
-            <p className="text-center mt-3 small">
+            <p className="text-center mt-3 small"> 
               Not admin?
-              <NavLink to="/" className="pro-link ms-1">
+              <NavLink to="/" className="pro-link ms-1 text-dark">
                 User Login
               </NavLink>
             </p>

@@ -143,7 +143,7 @@ function Product() {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <Header />
       <Button onClick={openAddModal}>+ Add Product</Button>
 
