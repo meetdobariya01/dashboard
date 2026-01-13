@@ -15,7 +15,7 @@
 // import axios from "axios";
 // import Header from "../header/header";
 
-// const API_URL = "http://localhost:5000/api/admin/orders";
+// const API_URL = "http://localhost:50000/api/admin/orders";
 
 // const Order = () => {
 //   const [orders, setOrders] = useState([]);

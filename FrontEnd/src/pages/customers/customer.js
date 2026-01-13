@@ -3,7 +3,7 @@ import axios from "axios";
 import { Table, Modal, Button } from "react-bootstrap";
 import Header from "../header/header";
 
-const API_URL = "http://localhost:7000/admin/customers";
+const API_URL = "http://localhost:5000/api/admin/customers";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);

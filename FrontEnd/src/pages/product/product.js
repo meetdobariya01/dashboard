@@ -15,7 +15,7 @@ const getAdminAxiosConfig = () => {
 
 function Product() {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // dynamic categories
+  const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -43,7 +43,7 @@ function Product() {
       const res = await axios.get(API_BASE, getAdminAxiosConfig());
       setProducts(res.data);
 
-      // dynamically extract unique categories
+      // extract unique categories
       const uniqueCategories = [
         ...new Set(res.data.map((p) => p.Category).filter((c) => c)),
       ];
@@ -62,12 +62,11 @@ function Product() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // preview local image before saving
     const previewUrl = URL.createObjectURL(file);
     setFormData({
       ...formData,
-      Photos: previewUrl, // temporarily store preview
-      _file: file, // store the actual file if needed for upload
+      Photos: previewUrl, // preview
+      _file: file,        // actual file
     });
   };
 
@@ -94,11 +93,30 @@ function Product() {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      if (editMode) {
-        await axios.put(`${API_BASE}/${selectedId}`, formData, getAdminAxiosConfig());
-      } else {
-        await axios.post(API_BASE, formData, getAdminAxiosConfig());
+      const data = new FormData();
+      data.append("ProductName", formData.ProductName);
+      data.append("ProductPrice", formData.ProductPrice);
+      data.append("Category", formData.Category);
+      data.append("Zodiac", formData.Zodiac || "");
+      data.append("Description", formData.Description || "");
+
+      if (formData._file) {
+        data.append("Photos", formData._file); // actual file upload
       }
+
+      const config = {
+        headers: {
+          ...getAdminAxiosConfig().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      if (editMode) {
+        await axios.put(`${API_BASE}/${selectedId}`, data, config);
+      } else {
+        await axios.post(API_BASE, data, config);
+      }
+
       fetchProducts();
       setShowModal(false);
     } catch (error) {
@@ -118,19 +136,15 @@ function Product() {
     }
   };
 
-  // bulletproof image URL
   const getImageUrl = (path) => {
     if (!path) return `${IMAGE_BASE}/images/placeholder.png`;
-    if (path.startsWith("http")) return path;
-
-    let cleanPath = path.replace(/^\/?images\/?/, "");
-    return `${IMAGE_BASE}/images/${cleanPath}`;
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `${IMAGE_BASE}${path}`;
   };
 
   return (
     <div className="p-4">
       <Header />
-
       <Button onClick={openAddModal}>+ Add Product</Button>
 
       <Table striped bordered className="mt-3">
@@ -144,7 +158,6 @@ function Product() {
             <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
           {products.length === 0 && (
             <tr>
@@ -165,7 +178,7 @@ function Product() {
                   style={{ objectFit: "cover" }}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = `${IMAGE_BASE}/placeholder.png`;
+                    e.target.src = `${IMAGE_BASE}/images/placeholder.png`;
                   }}
                 />
               </td>
@@ -177,7 +190,11 @@ function Product() {
                 <Button size="sm" onClick={() => openEditModal(p)}>
                   Edit
                 </Button>{" "}
-                <Button size="sm" variant="danger" onClick={() => handleDelete(p._id)}>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handleDelete(p._id)}
+                >
                   Delete
                 </Button>
               </td>
@@ -190,7 +207,6 @@ function Product() {
         <Modal.Header closeButton>
           <Modal.Title>{editMode ? "Edit Product" : "Add Product"}</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <Form onSubmit={handleSave}>
             {formData.Photos && (
@@ -225,7 +241,6 @@ function Product() {
               />
             </Form.Group>
 
-            {/* Category select dynamically populated */}
             <Form.Group className="mb-2">
               <Form.Label>Category</Form.Label>
               <Form.Select
@@ -243,7 +258,6 @@ function Product() {
               </Form.Select>
             </Form.Group>
 
-            {/* Zodiac select */}
             <Form.Group className="mb-2">
               <Form.Label>Zodiac</Form.Label>
               <Form.Select
@@ -269,9 +283,13 @@ function Product() {
 
             <Form.Group className="mb-2">
               <Form.Label>Choose Product Image</Form.Label>
-              <Form.Control type="file" accept="image/*" onChange={handleFileSelect} />
+              <Form.Control
+                type="file"
+                accept="image/*"
+                onChange={handleFileSelect}
+              />
               <small className="text-muted">
-                Image must exist in: dashboard/public/images/product/
+                Image will be uploaded to the server
               </small>
             </Form.Group>
 
